@@ -1,0 +1,141 @@
+import tkinter as tk
+import random
+import copy
+
+
+
+major_arcana = [
+    {"name": "0. The Fool", "suit": "Major Arcana", "description Upright": "New beginnings, innocence, free spirit", "description Reversed": "Holding back, risk-taking, and recklessness"},
+    {"name": "1. The Magician", "suit": "Major Arcana", "description Upright": "Manifestation, skill, resourcefulness", "description Reversed": "Manipulation, poor planning, and untapped talents"},
+    {"name": "2. The High Priestess", "suit": "Major Arcana", "description Upright": "Secrets, mystery, and the future as yet unrevealed", "description Reversed": "Disconnection from intuition, withdrawal, and silence"},
+    {"name": "3. The Empress", "suit": "Major Arcana", "description Upright": "Femininity, beauty, nature, nurturing, and abundance", "description Reversed": "Creative block, dependence on others"},
+    {"name": "4. The Emperor", "suit": "Major Arcana", "description Upright": "Authority, establishment, structure, a father figure", "description Reversed": "Domination, excessive control, lack of discipline, inflexibility"},
+    {"name": "5. The Hierophant", "suit": "Major Arcana", "description Upright": "Spiritual wisdom, religious beliefs, conformity, tradition, institutions", "description Reversed": "Personal beliefs, freedom, challenging the status quo"},
+    {"name": "6. The Lovers", "suit": "Major Arcana", "description Upright": "Love, harmony, relationships, values alignment, choices", "description Reversed": "Self-love, disharmony, imbalance, misalignment of values"},
+    {"name": "7. The Chariot", "suit": "Major Arcana", "description Upright": "Control, willpower, victory, and direction", "description Reversed": "Lack of control, aggression, inner conflict, and lack of direction"},
+    {"name": "8. Strength", "suit": "Major Arcana", "description Upright": "Courage, strength, inner power, and compassion", "description Reversed": "Fear, weakness, lack of self-control, and cruelty"},
+    {"name": "9. The Hermit", "suit": "Major Arcana", "description Upright": "Inner guidance, solitude, introspection, and spiritual wisdom", "description Reversed": "Loneliness, isolation, withdrawal, and lack of purpose"},
+    {"name": "10. Wheel of Fortune", "suit": "Major Arcana", "description Upright": "Destiny, karma, cycles, and change", "description Reversed": "Bad luck, stagnation, and feeling stuck"},
+    {"name": "11. Justice", "suit": "Major Arcana", "description Upright": "Justice, fairness, truth, and law", "description Reversed": "Injustice, unfairness, dishonesty, and karma"},
+    {"name": "12. The Hanged Man", "suit": "Major Arcana", "description Upright": "Sacrifice, letting go, new perspectives, and pause", "description Reversed": "Avoidance, procrastination, fear of change, and martyrdom"},
+    {"name": "13. Death", "suit": "Major Arcana", "description Upright": "Transformation, endings, and new beginnings", "description Reversed": "Fear of change, stagnation, and clinging to the past"},
+    {"name": "14. Temperance", "suit": "Major Arcana", "description Upright": "Balance, moderation, patience, and harmony", "description Reversed": "Imbalance, excess, impatience, and lack of harmony"},
+    {"name": "15. The Devil", "suit": "Major Arcana", "description Upright": "Materialism, addiction, shadow self, and guilt", "description Reversed": "Breaking free, overcoming addictions, and shadow work"},
+    {"name": "16. The Tower", "suit": "Major Arcana", "description Upright": "Sudden change, upheaval, and awakening", "description Reversed": "Fear of change, resistance to change, and clinging to the past"},
+    {"name": "17. The Star", "suit": "Major Arcana", "description Upright": "Hope, faith, inspiration, and guidance", "description Reversed": "Loss of hope, disappointment, and lack of faith"},
+    {"name": "18. The Moon", "suit": "Major Arcana", "description Upright": "Illusions, intuition, and the subconscious", "description Reversed": "Fear, deception, and confusion"},
+    {"name": "19. The Sun", "suit": "Major Arcana", "description Upright": "Joy, success, positivity, and vitality", "description Reversed": "Lack of joy, negativity, and fear of success"},
+    {"name": "20. Judgement", "suit": "Major Arcana", "description Upright": "Awakening, rebirth, and forgiveness", "description Reversed": "Fear of judgment, guilt, and lack of forgiveness"},
+    {"name": "21. The World", "suit": "Major Arcana", "description Upright": "Completion, accomplishment, and fulfillment", "description Reversed": "Lack of closure, unfinished business, and feeling lost"}
+]
+minor_arcana = [
+    {"name": "Ace of Cups", "suit": "Minor Arcana", "description Upright": "Love, new relationships, compassion and creativity", "description Reversed": "Self-love, intuition, and repressed emotion"},
+    {"name": "Two of Cups", "suit": "Minor Arcana", "description Upright": "Unified love, partnership, and mutual attraction", "description Reversed": "Self-love, break-ups, disharmony or distrust"},
+    {"name": "Three of Cups", "suit": "Minor Arcana", "description Upright": "Celebration, friendship, creativity, and collaborations", "description Reversed": "Independence, alone time, hardcore partying, a three's a crowd mentality"},
+    {"name": "Four of Cups", "suit": "Minor Arcana", "description Upright": "Contentment, reflection, and gratitude", "description Reversed": "Boredom, apathy, and dissatisfaction"},
+    {"name": "Five of Cups", "suit": "Minor Arcana", "description Upright": "Disappointment, loss, and grief", "description Reversed": "Letting go, acceptance, and moving on"},
+    {"name": "Six of Cups", "suit": "Minor Arcana", "description Upright": "Nostalgia, childhood memories, and innocent love", "description Reversed": "Living in the past, fear of the future, and lack of innocence"},
+    {"name": "Seven of Cups", "suit": "Minor Arcana", "description Upright": "Daydreaming, illusion, and choices", "description Reversed": "Lack of focus, indecision, and unrealistic expectations"},
+    {"name": "Eight of Cups", "suit": "Minor Arcana", "description Upright": "Walking away, letting go, and new beginnings", "description Reversed": "Fear of change, avoidance, and stagnation"},
+    {"name": "Nine of Cups", "suit": "Minor Arcana", "description Upright": "Contentment, wishes fulfilled, and abundance", "description Reversed": "Overindulgence, complacency, and unrealistic expectations"},
+    {"name": "Ten of Cups", "suit": "Minor Arcana", "description Upright": "Happiness, family, and emotional fulfillment", "description Reversed": "Disillusionment, broken relationships, and emotional pain"},
+    {"name": "Page of Cups", "suit": "Minor Arcana", "description Upright": "Creativity, inspiration, and new beginnings", "description Reversed": "Lack of inspiration, procrastination, and fear of creativity"},
+    {"name": "Knight of Cups", "suit": "Minor Arcana", "description Upright": "Romance, idealism, and emotional depth", "description Reversed": "Emotional instability, jealousy, and possessiveness"},
+    {"name": "Queen of Cups", "suit": "Minor Arcana", "description Upright": "Compassion, empathy, and emotional healing", "description Reversed": "Overly emotional, codependent, and manipulative"},
+    {"name": "King of Cups", "suit": "Minor Arcana", "description Upright": "Emotional maturity, wisdom, and understanding", "description Reversed": "Emotional immaturity, lack of empathy, and control issues"},
+    {"name": "Ace of Swords", "suit": "Minor Arcana", "description Upright": "New ideas, clarity, and truth", "description Reversed": "Mental confusion, indecision, and lack of clarity"},
+    {"name": "Two of Swords", "suit": "Minor Arcana", "description Upright": "Decision-making, balance, and neutrality", "description Reversed": "Avoidance, indecision, and fear of conflict"},
+    {"name": "Three of Swords", "suit": "Minor Arcana", "description Upright": "Heartbreak, sorrow, and loss", "description Reversed": "Healing, letting go, and moving on"},
+    {"name": "Four of Swords", "suit": "Minor Arcana", "description Upright": "Rest, recuperation, and solitude", "description Reversed": "Boredom, stagnation, and lack of motivation"},
+    {"name": "Five of Swords", "suit": "Minor Arcana", "description Upright": "Conflict, defeat, and betrayal", "description Reversed": "Guilt, regret, and letting go of grudges"},
+    {"name": "Six of Swords", "suit": "Minor Arcana", "description Upright": "Transition, moving on, and seeking peace", "description Reversed": "Fear of change, resistance to change, and stagnation"},
+    {"name": "Seven of Swords", "suit": "Minor Arcana", "description Upright": "Deception, betrayal, and hidden agendas", "description Reversed": "Honesty, integrity, and facing the truth"},
+    {"name": "Eight of Swords", "suit": "Minor Arcana", "description Upright": "Limitation, feeling trapped, and fear", "description Reversed": "Breaking free, overcoming fear, and taking action"},
+    {"name": "Nine of Swords", "suit": "Minor Arcana", "description Upright": "Anxiety, worry, and fear", "description Reversed": "Overcoming fear, finding peace, and letting go of worry"},
+    {"name": "Ten of Swords", "suit": "Minor Arcana", "description Upright": "Betrayal, ruin, and endings", "description Reversed": "New beginnings, recovery, and letting go of the past"},
+    {"name": "Page of Swords", "suit": "Minor Arcana", "description Upright": "Curiosity, quick thinking, and new ideas", "description Reversed": "Impulsiveness, lack of focus, and gossip"},
+    {"name": "Knight of Swords", "suit": "Minor Arcana", "description Upright": "Directness, action, and decisiveness", "description Reversed": "Aggression, recklessness, and impulsiveness"},
+    {"name": "Queen of Swords", "suit": "Minor Arcana", "description Upright": "Intelligence, clarity, and truth", "description Reversed": "Coldness, judgmental, and lack of empathy"},
+    {"name": "King of Swords", "suit": "Minor Arcana", "description Upright": "Authority, leadership, and justice", "description Reversed": "Tyranny, abuse of power, and harshness"},
+    {"name": "Ace of Wands", "suit": "Minor Arcana", "description Upright": "Creativity, inspiration, and new beginnings", "description Reversed": "Lack of motivation, procrastination, and fear of failure"},
+    {"name": "Two of Wands", "suit": "Minor Arcana", "description Upright": "Planning, ambition, and decision-making", "description Reversed": "Indecision, procrastination, and lack of direction"},
+    {"name": "Three of Wands", "suit": "Minor Arcana", "description Upright": "Expansion, growth, and progress", "description Reversed": "Stagnation, lack of progress, and fear of the future"},
+    {"name": "Four of Wands", "suit": "Minor Arcana", "description Upright": "Celebration, stability, and harmony", "description Reversed": "Disruption, instability, and lack of grounding"},
+    {"name": "Five of Wands", "suit": "Minor Arcana", "description Upright": "Conflict, competition, and struggle", "description Reversed": "Compromise, cooperation, and finding common ground"},
+    {"name": "Six of Wands", "suit": "Minor Arcana", "description Upright": "Success, victory, and public recognition", "description Reversed": "Arrogance, overconfidence, and lack of humility"},
+    {"name": "Seven of Wands", "suit": "Minor Arcana", "description Upright": "Defense, courage, and perseverance", "description Reversed": "Fear, doubt, and lack of confidence"},
+    {"name": "Eight of Wands", "suit": "Minor Arcana", "description Upright": "Action, speed, and rapid change", "description Reversed": "Delay, obstacles, and lack of progress"},
+    {"name": "Nine of Wands", "suit": "Minor Arcana", "description Upright": "Resilience, strength, and perseverance", "description Reversed": "Exhaustion, burnout, and fear of failure"},
+    {"name": "Ten of Wands", "suit": "Minor Arcana", "description Upright": "Burden, responsibility, and hard work", "description Reversed": "Overwhelm, stress, and need for support"},
+    {"name": "Page of Wands", "suit": "Minor Arcana", "description Upright": "Enthusiasm, creativity, and new ideas", "description Reversed": "Impulsiveness, lack of focus, and distraction"},
+    {"name": "Knight of Wands", "suit": "Minor Arcana", "description Upright": "Passion, adventure, and courage", "description Reversed": "Impatience, aggression, and recklessness"},
+    {"name": "Queen of Wands", "suit": "Minor Arcana", "description Upright": "Independence, passion, and creativity", "description Reversed": "Domineering, jealous, and controlling"},
+    {"name": "King of Wands", "suit": "Minor Arcana", "description Upright": "Leadership, passion, and creativity", "description Reversed": "Tyranny, aggression, and lack of control"}
+    ]
+
+# Create copies of the original decks to refill
+original_major_arcana = copy.deepcopy(major_arcana)
+original_minor_arcana = copy.deepcopy(minor_arcana)
+
+
+def draw_card(deck):
+    if not deck:
+        # If the deck is empty, refill it with a deep copy
+        deck.extend(copy.deepcopy(original_deck))
+    random_index = random.randint(0, len(deck) - 1)
+    drawn_card = deck.pop(random_index)
+    return drawn_card
+
+
+def display_cards(cards):
+    card_text = ""
+    for card in cards:
+        orientation = random.choice(["Upright", "Reversed"])
+        card_text += f"\nYour draw was: {card['name']} ({orientation})\n"
+        card_text += f"Description: {card[f'description {orientation}']}\n\n"
+
+    # Create a single window for all cards
+    card_window = tk.Toplevel()
+    card_window.title("Your Tarot Reading")
+
+    # Add a label to display the card information
+    card_label = tk.Label(card_window, text=card_text)
+    card_label.pack(padx=20, pady=20)
+
+    return card_window
+
+
+def draw_and_display():
+    global card_windows
+
+    # Close any existing card window before creating a new one
+    if card_windows:
+        card_windows[-1].destroy()  # Close the most recent window
+    card_windows = []
+
+    # Draw cards (modify the numbers and deck selection as needed)
+    selected_cards = []
+    selected_cards.append(draw_card(major_arcana))
+    selected_cards.append(draw_card(major_arcana))
+    selected_cards.append(draw_card(major_arcana))
+    selected_cards.append(draw_card(minor_arcana))
+    selected_cards.append(draw_card(minor_arcana))
+
+    # Refill decks
+    major_arcana.extend(copy.deepcopy(original_major_arcana))
+    minor_arcana.extend(copy.deepcopy(original_minor_arcana))
+
+    # Display cards in a new window
+    card_window = display_cards(selected_cards)
+    card_windows.append(card_window)  # Keep track of the new window
+
+# Main window
+root = tk.Tk()
+root.title("Tarot Reading")
+
+card_windows = []  # To store references to created windows
+
+draw_button = tk.Button(root, text="Draw Cards", command=draw_and_display)
+draw_button.pack(pady=20)
+
+root.mainloop()
